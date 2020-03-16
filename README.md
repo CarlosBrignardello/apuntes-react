@@ -6,7 +6,13 @@ Posee alta demanda por que es una librería muy ligera, posee un alto rendimient
 
 JSX es la sintaxis con la que se escribe código en React. Es una especie de fusión entre HTML y JS.
 
-React pe, cada vez que se realizaba un cambio, este se identificaba y se cambiaba. React incorpora el Dom Virtual que incluye una copia del DOM. Al utilizar JSX ya identificamos las etiquetas HTML por lo que no se deben ir a buscar, al existir una diferencia entre las copias son modificados los componentes en especifico.
+
+
+**Virtual DOM**
+
+**DOM**: Document object model, es la estructura con la que se representa un documento HTML. 
+
+El virtual DOM es una copia exacta del DOM que se guarda en memoria, el usuario solo ve el DOM que es visto por el navegador, al existir un cambio en el DOM, el virtual DOM le pide al DOM que solo actualice lo necesario. Permite manipular los cambios para renderizar la parte que nos interesa.
 
 
 
@@ -18,123 +24,31 @@ React pe, cada vez que se realizaba un cambio, este se identificaba y se cambiab
 </Layout>
 ```
 
-> Esto es JSX, es una especie de HTML en JavaScript. En este caso Blogspot es un componente.
+> Esto es JSX, es una especie de HTML en JavaScript.
 
 
 
-**Herramientas recomendadas**
+**Componentes - ¿Que son?**
 
-* **React developer tools**
+Los componentes son fragmentos de código que se pueden re-utilizar.
 
-* **Prettier**
+En un sitio al trabajar con una grilla se repite un mismo diseño en varias ocasiones, por lo que es un lugar indicado para utilizar componentes. Esto permite re-utilizar un trozo de código en varios lugares de la aplicación mediante su nombre, modificando únicamente sus parámetros al indicar su nombre.
 
-
-
-### Agregar React a un sitio web con JavaScript
+Los componentes pueden estar compuestos de otros componentes.
 
 
 
-**Añadir un contenedor en HTML**
-
-En un documento HTML añadimos la etiqueta `<div>` para marcar el lugar donde se busca visualizar algo con React.
-
-```html
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Add React in One Minute</title>
-  </head>
-  <body>
-
-    <h2>Agregar React a un sitio web</h2>
-    <p>Es posible utilizar React sin una herramienta de compilación.</p>
-    <p>React se esta cargando como un script.</p>
-      
-    <!-- El componente de React será cargado al interior de esta etiqueta. -->
-    <div id="like_button_container"></div>
-
-  </body>
-</html>
-```
-
-> En este caso agregamos un atributo id que permitirá manejarlo desde JavaScript más adelante y así visualizar un componente de React dentro del mismo.
->
-> React reemplazara cualquier contenido existente dentro de los contenedores del DOM.
-
-
-
-**Añadir React mediante Scripts**
-
-A continuación integramos React al documento mediante el uso de scripts.
-
-```html
-  <!-- ... HTML anterior ... -->
-
-  <!-- Cargar React. -->
-  <!-- Nota: cuando se despliegue, reemplazar "development.js" con "production.min.js". -->
-  <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
-
-  <!-- Cargamos nuestro componente de React. -->
-  <script src="like_button.js"></script>
-
-</body>
-```
-
-> El ultimo script permite importar nuestro archivo HTML que generara el componente de React.
-
-
-
-**Crear un componente en React**
-
-creamos el archivo "like_button.js" con el siguiente contenido:
-
-```js
-'use strict';
-
-class LikeButton extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { liked: false };
-  }
-
-  render() {
-    if (this.state.liked) {
-      return 'Le diste like.';
-    }
-
-    return React.createElement(
-      'button',
-      { onClick: () => this.setState({ liked: true }) },
-      'Like'
-    );
-  }
-}
-
-const domContainer = document.querySelector('#like_button_container');
-ReactDOM.render(React.createElement(LikeButton), domContainer);
-```
-
-> Este script ocasiona que al pulsar el botón cambie su mensaje.
-
-
-
-### Crear una aplicación con React
-
-El equipo de React principalmente recomienda las siguientes soluciones:
-
-- Si estás **aprendiendo React** o creando una nueva aplicación de página única, usa [Create React App](https://es.reactjs.org/docs/create-a-new-react-app.html#create-react-app).
-- Si estás construyendo un **sito web renderizado en servidor con Node.js,** prueba [Next.js](https://es.reactjs.org/docs/create-a-new-react-app.html#nextjs).
-- Si estás construyendo un **sitio web orientado a contenido estático,** prueba [Gatsby](https://es.reactjs.org/docs/create-a-new-react-app.html#gatsby).
-
-
-
-#### Create-react-app
+### Create-react-app
 
 Create React App es un ambiente cómodo para aprender React, es la mejor forma de comenzar a construir una nueva aplicación brindando una buena experiencia de desarrollo, y optimizando tu aplicación para producción.  
 
 Se trata de una herramienta que desde la terminal genera un entorno de desarrollo para React.
+
+Es necesario instalar **Node Js**:
+
+* https://nodejs.org/es/
+
+Al instalar Node podemos utilizar el administrador de paquetes de node (npm), permite administrar los paquetes que utilicemos en los proyectos JavaScript.
 
 
 
@@ -155,6 +69,7 @@ create-react-app *NOMRE_PROYECTO*
 **Iniciar el proyecto**
 
 ```bash
+cd /*NOMBRE_PROYECTO*
 npm run start
 ```
 
@@ -162,34 +77,19 @@ npm run start
 
 **Create React App** no se encarga de la lógica de `backend` o de bases de datos; tan solo crea un flujo de construcción para `frontend`, de manera que lo puedes usar con cualquier `backend`. 
 
+De esta forma se genera todo de forma automática, incluso la inicialización de git y un commit. Este comando nos crea un componente denominado App.js, archivo CSS para el componente y un archivo index.js que renderiza el componente App. 
+
+En el proyecto nos encontramos con un archivo denominado **package.json** que se trata de un objeto JavaScript, posee toda la configuración del proyecto, se puede modificar el nombre del proyecto, están declaradas en el las dependencias y librerías del proyecto, en este caso existen (react, react-dom, react-scripts). Poseemos también la configuración de los comandos del proyecto. Los archivos .test permiten construir y ejecutar pruebas.
 
 
-**Compactar JavaScript para producción**
-
-* https://gist.github.com/gaearon/42a2ffa41b8319948f9be4076286e1f3
-
-
-
-### Hola mundo
-
-El ejemplo más básico de React:
-
-```react
-ReactDOM.render(
-  <h1>Hello, world!</h1>,
-  document.getElementById('root')
-);
-```
-
-> Este muestra un encabezado con el texto “Hello, world!” en la página. 
 
 
 
 ### JSX
 
-Es de una extensión de la sintaxis de Javascript. Es recomendado utilizarlo con React para describir cómo debería ser la interfaz de usuario. 
+Es de una extensión de la sintaxis de JavaScript. Es recomendado utilizarlo con React para describir cómo debería ser la interfaz de usuario. 
 
-Ejemplo:
+**Ejemplo**:
 
 ```react
 const element = <h1>Hello, world!</h1>;
@@ -197,11 +97,124 @@ const element = <h1>Hello, world!</h1>;
 
 
 
-React no requiere usar JSX, pero la mayoría de la gente lo encuentra útil como ayuda visual cuando trabajan con interfaz de usuario dentro del código Javascript. Esto también permite que React muestre mensajes de error o advertencia más útiles. 
+React no requiere usar JSX, pero la mayoría de la gente lo encuentra útil como ayuda visual cuando trabajan con interfaz de usuario dentro del código JavaScript. Esto también permite que React muestre mensajes de error o advertencia más útiles. 
+
+JSX produce elementos de React, los elementos son bloques de las aplicaciones en React, describen lo que se quiere ver por pantalla. 
 
 
 
-**Insertando expresiones en JSX**
+**Renderizado en React**
+
+En el archivo index.js cargamos nuestro componente App mediante el siguiente código:
+
+```js
+ReactDOM.render(<App />, document.getElementById('root'));
+```
+
+Con `ReactDOM.render(elemento, donde)`, renderizamos un componente en una ubicación especifica.
+
++ **DONDE**: por defecto en nuestro documento **index.html** posee un contenedor con un id denominado "***root***", este ultimo es manejado en el `ReactDom.render` mediante la función `document.getElementById("root")`. 
+
+De esta manera conseguimos que un componente sea cargado en un archivo html.
+
+
+
+**Renderizar componente externo desde index.js**
+
+> **App.js**
+>
+> Generamos el componente, en este caso el componente simplemente devuelve un h1.
+
+```jsx
+import React from 'react';
+
+const App = () => <h1>h1 desde App.js</h1>
+
+export default App;
+```
+
+
+
+> **index.js**
+>
+> Importamos App.js y lo declaramos como elemento a renderizar.
+
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+
+ReactDOM.render(<App />, document.getElementById("root"));
+```
+
+
+
+**Crear componente**
+
+Como ejemplo generamos el siguiente componente basado en un navbar: 
+
+```jsx
+import React from 'react';
+import {BrowserRouter, Link} from 'react-router-dom'
+
+const App = () => (
+  <BrowserRouter>
+    <header className="navbar">
+      <h1>LOGO</h1>
+      <nav>
+        <ul>
+          <li> <Link to="#">Pagina uno</Link> </li>
+          <li> <Link to="#">Pagina dos</Link> </li>
+          <li> <Link to="#">Pagina tres</Link> </li>
+        </ul>
+      </nav>
+    </header>
+  </BrowserRouter>
+)
+
+export default App;
+```
+
+**Componentes con padre único:** todos los componentes deben tener un único elemento padre, el resto de elementos pueden ir anidados en su interior. Podemos recurrir a la etiqueta `<Frament>` que viene disponible al importar react para envolver a todos los elementos en un único padre. 
+
+**Etiquetas self-closing invalidas**: Las etiquetas ***self-closing*** deben ser cerradas en react.
+
+**class y camelCase**: la propiedad class queda sustituida por className y a su vez todos los atributos especiales.
+
+**No condicionales**: en JSX no podemos utilizar if, else o while.
+
+Para renderizar más de un componente debemos crear la ruta **"/src/components"**, crear componentes y luego importarlos.
+
+
+
+**Agregar expresiones JavaScript en JSX**
+
+Las expresiones deben ser incluidas de la siguiente forma en JSX:
+
+1. `{ 1 + 1 }`
+
+2. ```jsx
+   const user= { "name": "Carlos Brignardello", "user": "cbrigcode" }
+   /*
+   const Card = () => (
+       <div className="card">
+       	*/
+           <p>Hola { user.name }</p>
+   		/*
+   ```
+
+3. ```jsx
+   const user = { "name": "Carlos Brignardello", "user": "cbrigcode", "premium": true }
+   /*
+   const Card = () => (
+       <div className="card">
+       */
+           <p> { user.premium ? "Bienvenido a tu cuenta premium" : null } </p>
+   ```
+
+   De esta forma utilizamos condicionales en JSX. Los String pueden poseer etiquetas en su interior. Las expresiones pueden ser usadas para completar atributos html.
+
+
 
 En el ejemplo a continuación, declaramos una variable llamada `name` y luego la usamos dentro del JSX envolviéndola dentro de llaves:
 
@@ -212,8 +225,6 @@ const element = <h1>Hello, {name}</h1>;
 ReactDOM.render(element, document.getElementById('root')
 );
 ```
-
-Puedes poner cualquier expresión de JavaScript dentro de llaves en JSX. Por ejemplo, `2 + 2`, `user.firstName`, o `formatName(user)` son todas expresiones válidas de Javascript.
 
 
 
@@ -282,112 +293,7 @@ No pongas comillas rodeando llaves cuando insertes una expresión JavaScript en 
 
 
 
-**JSX previene ataques de inyección**
-
-Es seguro insertar datos ingresados por el usuario en JSX:
-
-```react
-const title = response.potentiallyMaliciousInput;
-// Esto es seguro:
-const element = <h1>{title}</h1>;
-```
-
-Por defecto, React DOM [escapa](https://stackoverflow.com/questions/7381974/which-characters-need-to-be-escaped-on-html) cualquier valor insertado en JSX antes de renderizarlo. De este modo, se asegura de que nunca se pueda insertar nada que no esté explícitamente escrito en tú aplicación. Todo es convertido en un string antes de ser renderizado. Esto ayuda a prevenir vulnerabilidades [XSS (cross-site-scripting)](https://es.wikipedia.org/wiki/Cross-site_scripting).
-
-
-
-**JSX representa objetos**
-
-Babel compila JSX a llamadas de `React.createElement()`.
-
-Estos dos ejemplos son idénticos:
-
-```react
-const element = (
-  <h1 className="greeting">
-    Hello, world!
-  </h1>
-);
-const element = React.createElement(
-  'h1',
-  {className: 'greeting'},
-  'Hello, world!'
-);
-```
-
-`React.createElement()` realiza algunas comprobaciones para ayudarte a escribir código libre de errores, pero, en esencia crea un objeto como este:
-
-```reac
-// Nota: Esta estructura está simplificada
-const element = {
-  type: 'h1',
-  props: {
-    className: 'greeting',
-    children: 'Hello, world!'
-  }
-};
-```
-
-
-
-### Renderizando los elementos
-
-Un elemento describe lo que quieres ver en la pantalla:
-
-```react
-const element = <h1>Hello, world</h1>;
-```
-
-A diferencia de los elementos del DOM de los navegadores, los elementos de React son objetos planos, y su creación es de bajo costo. React DOM se encarga de actualizar el DOM para igualar los elementos de React.
-
-
-
-**Renderizando un elemento en el DOM**
-
-Digamos que hay un `<div>` en alguna parte de tu archivo HTML:
-
-```react
-<div id="root"></div>
-```
-
-Lo llamamos un nodo “raíz” porque todo lo que esté dentro de él será manejado por React DOM.
-
-Las aplicaciones construidas solamente con React usualmente tienen un único nodo raíz en el DOM. Dado el caso que estés integrando React en una aplicación existente, puedes tener tantos nodos raíz del DOM aislados como quieras.
-
-Para renderizar un elemento de React en un nodo raíz del DOM, pasa ambos a `ReactDOM.render()`:
-
-```react
-const element = <h1>Hello, world</h1>;
-ReactDOM.render(element, document.getElementById('root'));
-```
-
->  Esto muestra “Hello, world” en la página. 
-
-
-
-## Actualizando el elemento renderizado
-
-Los elementos de React son [inmutables](https://es.wikipedia.org/wiki/Objeto_inmutable). Una vez creas un elemento, no puedes cambiar sus hijos o atributos. Un elemento es como un fotograma solitario en una película: este representa la interfaz de usuario en cierto punto en el tiempo.
-
-Con nuestro conocimiento hasta este punto, la única manera de actualizar la interfaz de usuario es creando un nuevo elemento, y pasarlo a `ReactDOM.render()`.
-
-Considera este ejemplo de un reloj en marcha:
-
-```react
-function tick() {
-  const element = (
-    <div>
-      <h1>Hello, world!</h1>
-      <h2>It is {new Date().toLocaleTimeString()}.</h2>
-    </div>
-  );
-  ReactDOM.render(element, document.getElementById('root'));
-}
-
-setInterval(tick, 1000);
-```
-
-Este llama a `ReactDOM.render()` cada segundo desde un callback del [`setInterval()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setInterval).
+**Nota**: No utilices comillas rodeando llaves, las "comillas" son para valores de atributos con strings, las {llaves} son para expresiones JavaScript.
 
 
 
@@ -401,128 +307,173 @@ En nuestra experiencia, pensar en cómo la interfaz de usuario debería verse en
 
 
 
-### Entorno de desarrollo de React
+### Props
 
-**src:** posee todo el código fuente de la aplicación.
+Las propiedades nos sirven básicamente para cargar de datos a los componentes, de modo que éstos puedan personalizar su comportamiento, o para transferir datos de unos componentes a otros para producirse la interoperabilidad entre componentes.
 
-**/src/index.js:** es el punto de entrada de la aplicación, dentro de este archivo se importa App.js que es renderizada.
 
-**/src/App.js:**  posee código JSX, 
 
-**package.json:** 
+Podemos utilizarlo para otorgar valores a un componente al momento de declararlo de la siguiente forma:
 
-```json
-{
-  "name": "01-proyecto-prueba",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": { // Donde se ubican las dependencias de React.
-    "react": "^16.11.0",
-    "react-dom": "^16.11.0",
-    "react-scripts": "3.2.0"
-  },
-  "scripts": { // Comandos de desarrollo en React.
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": { // Herramienta para la detección de errores en el código.
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+1. ```jsx
+   const Card = props => (
+       <div className="card">
+           <p>Hola { user.name }</p>
+           <p> { user.premium ? "Bienvenido a tu cuenta premium" : null } </p>
+           <img src={props.url} alt=""/>
+           <h2>Este es {props.name}.</h2>
+       </div>
+   )
+   ```
+
+   Debemos entregar como atributo "props" al componente para dentro del mismo poder utilizar la notación "**props.PROPIEDAD**" que definira el valor asignado al ser declarado.
+
+2. ```jsx
+       <Card 
+         name="Mojito" url="https://cdn140.picsart.com/295235072129211.png?r1024x1024"
+       />
+       <Card 
+           name="Tequila"
+           url="https://i.pinimg.com/564x/82/1c/8c/821c8c26d29feb57f3feae5171123901.jpg"
+       />
+       <Card />
+   ```
+
+   En este caso en el componente App.js fue declaro el componente y se le asignaron las propiedades "name", "url".
+
+Si revisamos desde la consola de React podremos ver esas propiedades.
+
+Al declarar el objeto **props** en un componente se permite la lectura de las propiedades al crear los componentes.
+
+
+
+También es posible en el componente utilizar props al denotar únicamente las propiedades que se desean trabajar:
+
+```jsx
+const Card = ({ url, name }) => (
+    <div className="card">
+        <p>Hola { user.name }</p>
+        <p> { user.premium ? "Bienvenido a tu cuenta premium" : null } </p>
+        <img src={url} alt=""/>
+        <h2>Este es {name}.</h2>
+    </div>
+)
+```
+
+
+
+### Tipos de componente
+
+
+
+**Componente funcional o presentacional**
+
+Su única función es presentarse en la interfaz, no posee lógica, no puede presentar eventos o cambiar por si solo, solo recibe propiedades y las procesa.
+
+Su sintaxis es la siguiente:
+
+```jsx
+import React from 'react'
+
+const Component = props => (
+    <div>
+    	ESTRUCTURA JSX
+    </div>
+)
+
+export default Component
+```
+
+1. Debemos **importar react.**
+2. Utilizamos una constante y le damos un **nombre basado en el nombre del componente** que será igual a la función que agregaremos que en este caso posee los **props como argumento**. En su interior retornaremos una **estructura JSX**, es por eso que utilizamos "**()**" en el arrowFunction.
+3. Exportamos el componente.
+
+
+
+**Utilizar Ternarios para undefined**
+
+En caso de que un componente no posea una imagen o un contenido al ser definido podemos definir un dato predeterminado:
+
+```jsx
+const Card = ({ url, name }) => (
+    <div className="card">
+        <p>Hola { user.name }</p>
+        <p> { user.premium ? "Bienvenido a tu cuenta premium" : null } </p>
+        {
+            url ? <img src={url} alt=""/>
+            : <img src="https://www.tuotrodiario.com/imagenes/en-la-red/2018060174867/conoce-luhu-gatito-mas-triste-del-mundo/0-245-54/gatito3-z.jpg" alt=""/>
+        }
+        <h2>
+        {name ? name  
+        : <h2>No se pudo encontrar el gatito.</h2>}
+        </h2>
+    </div>
+)
+```
+
+Al no enviar datos en el prop se mostrara una imagen y un texto por defecto.
+
+
+
+**Librería prop-types**
+
+Permite definir tipos de propiedades, entre ellas propiedades por defecto.
+
+**Instalar**: npm install prop-types
+
+Para hacer esta tarea simplemente importamos la librería en el componente en el que la buscamos aplicar y declaramos lo siguiente antes de exportar el componente:
+
+```jsx
+import PropTypes from 'prop-types'
+
+/* COMPONENTE */
+
+Card.propTypes = {
+    url: PropTypes.string,
+    name: PropTypes.string
 }
 
+Card.defaultProps = {
+    url: "https://www.tuotrodiario.com/imagenes/en-la-red/2018060174867/conoce-luhu-gatito-mas-triste-del-mundo/0-245-54/gatito3-z.jpg",
+    name: "No se pudo encontrar el gatito."
+}
+```
+
+De esta forma declaramos el tipo de dato esperado y además un comportamiento por defecto.
+
+
+
+**Recorrer Arrays de componentes**
+
+Definimos en App.js una lista de objetos:
+
+```jsx
+const gatitos = [
+  {"name": "Mojito", "url": "https://cdn140.picsart.com/295235072129211.png?r1024x1024"},
+  {"name": "Tequila", "url": "https://i.pinimg.com/564x/82/1c/8c/821c8c26d29feb57f3feae5171123901.jpg"},
+  {"name": "Gustavo", "url": "https://cdn140.picsart.com/286770672011211.png?r1024x1024"},
+  {"name": "Snowball", "url": "https://i.pinimg.com/originals/17/0a/81/170a815040a32fcc2f596c59c9284c15.jpg"},
+  {"name": "Jaskier", "url": "https://i.pinimg.com/originals/68/6c/25/686c25b3885ec377547d2b73c2c51eb0.jpg"},
+]
 ```
 
 
 
+Para recorrer el componente varias veces hacemos lo siguiente:
 
-
-### Clonar un proyecto externo de React
-
-
-
-**Clonar proyecto**
-
-```bash
-git clone https://github.com/Sparragus/platzi-badges.git
+```jsx
+const App = () => (
+  <div>
+    <Navbar />
+    {
+      gatitos.map( gato => 
+        <Card 
+          name={gato.name} 
+          url={gato.url}
+        />
+      )
+    }
+  </div>
+)
 ```
 
-
-
-**Instalar las dependencias del proyecto**
-
-```bash
-cd *CARPETA_GENERADA*
-npm install
-npm run start
-```
-
-
-
-### ReactDOM.render
-
-Renderiza un elemento React al DOM en el `contenedor` suministrado y retorna una [referencia](https://es.reactjs.org/docs/more-about-refs.html) al componente (o devuelve `null` para [componentes sin estado](https://es.reactjs.org/docs/components-and-props.html#functional-and-class-components)).
-
-Si el elemento React fue previamente renderizado al `contenedor`, esto ejecutará una actualización en él, y solo mutará el DOM de ser necesario para reflejar el más reciente elemento React.
-
-
-
-**Añadir contenido mediante JS**
-
-```js
-const name = "Carlos"
-const element = document.createElement('h1') // Creamos un elemento
-element.innerText = `Hola soy ${name}` // Asignamos un contenido
-const container = document.getElementById('app') // Vinculamos mediante ID
-
-container.appendChild(element) // Añadimos el elemento creado
-```
-
-> /src/index.js
->
-> De esta forma añadimos contendido al sitio (public/index.html) mediante JavaScript.
-
-
-
-**Añadir contenido mediante React.createElement()**
-
-```react
-import React from 'react';
-import ReactDOM from 'react-dom';
-
-const name = 'Carlos';
-const element = React.createElement('h1', { }, `Hola soy ${name}`) // Posee tres argumentos | Elemento, Atributos, Contenido
-const container = document.getElementById('app');
-
-ReactDOM.render(element, container);
-```
-
-
-
-**Añadir contenido mediante React & JSX**
-
-```react
-import React from 'react'; // Siempre que usemos JSX debemos importar la libreria de react.
-import ReactDOM from 'react-dom';
-
-const name = "Carlos"
-const element = <h1>Hola soy {name}</h1>
-const container = document.getElementById('app');
-
-ReactDOM.render(element, container); // Tomamos dos argumentos, que renderizamos y donde.
-```
-
-> Es recomendado utilizar JSX debido a que permite generar muchos más elementos HTML de forma más simple y ordenada, en contra posición con utilizar `React.createElement()` que es menos escalable.

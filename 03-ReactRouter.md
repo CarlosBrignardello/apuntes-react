@@ -2,8 +2,6 @@
 
 React Router es una librería que ayuda a generar Single Page Apps.
 
-
-
 **Multi page Apps**: Cada página o enlace implica una petición al servidor. La respuesta usualmente posee todo el contenido de la página por lo que esta se debe volver a renderizar cada vez. 
 
 **Single page Apps**(SPA): Aplicaciones que cargan una sola página de HTML y cualquier actualización la hacen re-escribiendo el HTML que ya poseían. No se debe volver a renderizar toda la página es más fluida.

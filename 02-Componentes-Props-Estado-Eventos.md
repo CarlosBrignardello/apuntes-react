@@ -4,23 +4,223 @@
 
 ### ¿Que son?
 
-En react existe una unidad básica de desarrollo denominada Componente, los componentes son una serie de elementos individuales que forman un sitio web completo. 
+En React existe una unidad básica de desarrollo denominada **Componente**, permiten separar la interfaz de usuario en piezas independientes, **reutilizables** y pensar en cada pieza de forma aislada. 
 
-Una casa seria un elemento y un componente seria un plano, el Componente es una clase y el elemento es un objeto.
+Conceptualmente, los componentes son como las funciones de JavaScript. **Aceptan entradas arbitrarias (llamadas “props”) y devuelven a React elementos** que describen lo que debe aparecer en la pantalla.
 
-Se debe buscar que elementos se repiten y que elementos cumplen funciones muy especificas (tanto visual como de funcionalidad). Los componentes sirven para encapsular lógica y agrupar comportamientos y aspectos visuales en un único lugar.
+Se debe buscar que elementos se repiten y que elementos cumplen funciones muy especificas (tanto visual como de funcionalidad). Los componentes **sirven para encapsular lógica** y **agrupar comportamientos y aspectos visuales en un único lugar**.
 
-> Una barra de búsqueda es un ejemplo perfecto de un componente.
+> Una barra de búsqueda y una barra de navegación son ejemplos perfectos de un componente. Identificar componentes es una habilidad esencial para poder desarrollar aplicaciones de React.
 >
-> Identificar componentes es una habilidad esencial para poder desarrollar aplicaciones de React.
 
 
 
-### Generar un componente
+### Definir un componente
 
-Es recomendable guardar los componentes en una ruta /src/components
+Es recomendable guardar los componentes en una ruta del tipo *"/src/components"*
 
-> Generamos el archivo Badge.js
+
+
+### Componentes funcionales y de clase
+
+
+
+**Componente funcional**
+
+La forma más sencilla de definir un componente es escribir una función de JavaScript:
+
+```react
+function Welcome(props) {
+  return <h1>Hello, {props.name}</h1>;
+}
+```
+
+> Esta función es un componente de React válido porque acepta un solo argumento de objeto “props” (que proviene de propiedades) con datos y devuelve un elemento de React. **Llamamos a dichos componentes “funcionales” porque literalmente son funciones JavaScript**.
+
+
+
+**Componente de clase**
+
+También puedes utilizar una [clase de ES6](https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Classes) para definir un componente:
+
+```react
+class Welcome extends React.Component {
+  render() {
+    return <h1>Hello, {this.props.name}</h1>;
+  }
+}
+```
+
+> Los dos componentes anteriores son equivalentes desde el punto de vista de React.
+>
+> A diferencia del componente funcional en el componente de clase debemos anteponer la palabra clave "**this**" para obtener los props del componente y no se necesitan definir las funciones en su interior.
+
+
+
+### Renderizar un componente
+
+Anteriormente, sólo encontramos elementos de React que representan las etiquetas del DOM:
+
+```react
+const element = <div />;
+```
+
+Sin embargo, los elementos también pueden representar componentes definidos por el usuario:
+
+```react
+const element = <Welcome name="Carlos" />;
+```
+
+Cuando React ve un elemento representando un componente definido por el usuario, pasa atributos JSX a este componente como un solo objeto. **Llamamos a este objeto “props”**.
+
+Por ejemplo, este código muestra “Hola, Carlos” en la página:
+
+```react
+function Welcome(props) {
+  return <h1>Hola, {props.name}</h1>;
+}
+
+const element = <Welcome name="Carlos" />;
+ReactDOM.render(
+  element,
+  document.getElementById('root')
+);
+```
+
+
+
+### Extracción de componentes
+
+Es posible dividir los componentes en otros más pequeños, por ejemplo el siguiente componente utilizado para renderizar unos comentarios en una web de redes sociales:
+
+```react
+function Comment(props) {
+  return (
+    <div className="Comment">
+      <div className="UserInfo">
+        <img className="Avatar"
+          src={props.author.avatarUrl}
+          alt={props.author.name}
+        />
+        <div className="UserInfo-name">
+          {props.author.name}
+        </div>
+      </div>
+      <div className="Comment-text">
+        {props.text}
+      </div>
+      <div className="Comment-date">
+        {formatDate(props.date)}
+      </div>
+    </div>
+  );
+}
+```
+
+> Este componente puede ser difícil de cambiar debido a todo el anidamiento, y también es difícil reutilizar partes individuales de él. 
+
+
+
+Podemos extraer algunos componentes del mismo en este caso el fragmento que incorpora el Avatar:
+
+```react
+function Avatar(props) {
+  return (
+    <img className="Avatar"
+      src={props.user.avatarUrl}
+      alt={props.user.name}
+    />
+  );
+}
+```
+
+
+
+Ahora podemos simplificar `Comment` un poquito:
+
+```react
+function Comment(props) {
+  return (
+    <div className="Comment">
+      <div className="UserInfo">
+        <Avatar user={props.author} />
+        <div className="UserInfo-name">
+          {props.author.name}
+        </div>
+      </div>
+      <div className="Comment-text">
+        {props.text}
+      </div>
+      <div className="Comment-date">
+        {formatDate(props.date)}
+      </div>
+    </div>
+  );
+}
+```
+
+
+
+Podemos repetir la extracción del componente aún más, podemos extraer un componente `UserInfo` que renderiza un `Avatar` al lado del nombre del usuario:
+
+```react
+function UserInfo(props) {
+  return (
+    <div className="UserInfo">
+      <Avatar user={props.user} />
+      <div className="UserInfo-name">
+        {props.user.name}
+      </div>
+    </div>
+  );
+}
+```
+
+
+
+Finalmente el componente fue extraído tantas veces que termino así:
+
+```react
+function Comment(props) {
+  return (
+    <div className="Comment">
+      <UserInfo user={props.author} />
+      <div className="Comment-text">
+        {props.text}
+      </div>
+      <div className="Comment-date">
+        {formatDate(props.date)}
+      </div>
+    </div>
+  );
+}
+```
+
+> Esto es mucho más simple y escalable. Extraer componentes puede parecer un trabajo pesado al principio, pero tener una paleta de componentes reutilizables vale la pena en aplicaciones más grandes. Una buena regla en general es que si una parte de su interfaz de usuario se usa varias veces (`Button`, `Panel`, `Avatar`), o es lo suficientemente compleja por sí misma (`App`, `FeedStory`, `Comment`), es buen candidato para ser un componente reutilizable.
+
+
+
+**Los props son de solo lectura**
+
+Ya sea que declares un componente como una función o como una clase, **este nunca debe modificar sus props**.
+
+```js
+function sum(a, b) {
+  return a + b;
+}
+```
+
+Tales funciones son llamadas [“puras”](https://es.wikipedia.org/wiki/Programación_funcional#Funciones_puras) por que no tratan de cambiar sus entradas, y siempre devuelven el mismo resultado para las mismas entradas.
+
+**Todos los componentes de React deben actuar como funciones puras con respecto a sus props.**
+
+Por supuesto, las interfaces de usuario de las aplicaciones son dinámicas y cambian con el tiempo. Por ello existe el concepto de “estado”. El estado le permite a los componentes de React cambiar su salida a lo largo del tiempo en respuesta a acciones del usuario.
+
+
+
+## Proyecto
+
+* Generamos el archivo Badge.js
 
 ```react
 import React from 'react'; // 1.
@@ -48,13 +248,13 @@ export default Badge; // 4.
 ```
 
 > 1. Como utilizaremos JSX importamos las librería de React.
-> 2. Los componentes son clases, por lo que generaremos una que heredara de la clase `React.Component`
+> 2. Generaremos un componente de clase que heredara de la clase `React.Component`
 > 3. Todos los componentes requieren al menos del método `render()`, este define cual será el resultado que se vera en pantalla.
 > 4. Exportamos el componente.
 
 
 
-> Importamos el componente en index.js y mostramos su contenido.
+* Importamos el componente en index.js y mostramos su contenido.
 
 ```react
 import React from 'react';
@@ -73,17 +273,11 @@ ReactDOM.render(<Badge />, container);  // 2.
 
 ### Aplicar estilos a un componente
 
-
-
-#### Estilos convencionales
+**Estilos convencionales**
 
 Para insertar estilos utilizamos CSS, para ello debemos hacer referencia a ello en el componente.
 
-**Nota:** Generamos la ruta **/src/components/styles** para guardar todos los estilos que utilizaremos para los componentes.
-
-
-
-> ../components/styles/Badge.css
+**Nota:** Generamos la ruta **/src/styles/components** o **/src/components/styles** para guardar todos los estilos que utilizaremos para los componentes.
 
 ```css
 .Badge {
@@ -141,42 +335,27 @@ Para insertar estilos utilizamos CSS, para ello debemos hacer referencia a ello 
 
 
 
-Para vincular un estilo a un componente debemos importar el archivo, sin guardarlo en una variable, basta solo con traerlo y como es costumbre utilizamos las clases para vincular estilos, sin embargo en react utilizamos el atributo class como `className=""`.
+Para vincular un estilo a un componente debemos importar el archivo, sin guardarlo en una variable, basta solo con traerlo y como es costumbre utilizamos las clases para vincular estilos, sin embargo **en React utilizamos el atributo `class=""` como `className=""`.**
 
 ```react
-import React from 'react';
-import confLogo from '../images/badge-header.svg'
 import './styles/Badge.css'
+/*
+import confLogo from '../images/badge-header.svg'
+import React from 'react';
 
 class Badge extends React.Component{
     render(){
-        return <div className="Badge">
-            <div className="Badge__header">
-                <img src={confLogo} alt="Logo de la conferencia"/>
-            </div>
-            <div className="Badge__section-name">
-                <img  className="Badge__avatar" src="https://www.gravatar.com/avatar?d=identicon" alt="Avatar" />
-                <h1>Carlos <br/>Brignardello</h1>
-            </div>
-            <div className="Badge__section-info">
-                <h3>Frontend Developer</h3>
-                <div>@cbrigcode</div>
-            </div>
-            <div className="Badge__footer" >#platziconf</div>
-        </div>
-    }
-}
-
-export default Badge;
+		...
+*/
 ```
 
 
 
-#### Importar Bootstrap
+### Importar Bootstrap
 
 
 
-Desde la consola:
+**Desde la consola:**
 
 ```bash
 # Dentro del proyecto
@@ -192,7 +371,7 @@ import "bootstrap/dist/css/bootstrap.css";
 
 
 
-#### Importar estilos globales
+### Importar estilos globales
 
 **Nota:** en **/src/** generamos un archivo denominado `global.css` que aplicara un mismo estilo a todos los elementos del proyecto.
 
@@ -289,13 +468,9 @@ a.link-unstyled:hover {
 
 El componente generado anteriormente no es reusable, debido a que posee un  nombre definido en el mismo documento como es "Carlos Brignardello".
 
-En react los componentes poseen props los cuales análogamente serian como los atributos en HTML.
 
 
-
-**Definir props**
-
-Para definir las props debemos utilizar la notación `this.props.*ATRIBUTO*`
+**Definir props en el componente**
 
 ```react
 class Badge extends React.Component{
@@ -317,6 +492,8 @@ class Badge extends React.Component{
     }
 }
 ```
+
+
 
 **Generar props**
 
@@ -342,11 +519,10 @@ Una página es un componente que en su interior posee más componentes.
 
 
 
-> Generamos un componente que actuara como página denominado BadgeNew.js
+* Generamos un componente que actuara como página denominado BadgeNew.js
 
 ```js
 import React from 'react';
-
 import './styles/BadgeNew.css';
 import header from '../images/badge-header.svg';
 import Navbar from '../components/Navbar';
@@ -368,12 +544,10 @@ class BadgeNew extends React.Component {
                         </div>
                     </div>
                 </div>
-
             </div>
         )
     }
 }
-
 export default BadgeNew;
 ```
 
@@ -401,7 +575,6 @@ container);
 
 ```react
 import React from 'react';
-
 import './styles/Navbar.css';
 import logo from '../images/logo.svg'
 
@@ -423,6 +596,12 @@ export default Navbar;
 ```
 
 
+
+Eventos
+
+
+
+## Proyecto
 
 ### Enlazando eventos
 
@@ -471,33 +650,9 @@ export default BadgeForm;
 
 
 
-**Componente funcional vs Componente de clase**
+# Estado
 
-```react
-/* Funcional */
-const App = () =>{
-	const unaFuncion = () => [...]
-}
-```
-
-> No poseen estados.
-
-
-
-```react
-/* Clase */
-import React, { Component } from 'react';
-
-class App extends Component{
-	unaFuncion = () => [...]
-}
-
-render({
-	return()
-})
-```
-
-> Poseen estados y no se necesitan definir las funciones.
+El uso de los estados permite hacer a los componentes verdaderamente reutilizables y encapsulados. El estado es similar a las props, pero es privado y está completamente controlado por el componente. **Para utilizar estados es necesario trabajar con componentes de clase**.
 
 
 
@@ -506,6 +661,107 @@ render({
 Hasta el momento los componentes han obtenido información mediante props provenientes de otros componentes. Existe una forma en que los componentes puedan producir y guardar su propia información.
 
 La información a otros componentes pasaría en una sola dirección, sin embargo no podrá ser modificada.
+
+El método `render` se invocará cada vez que ocurre una actualización. Esto nos permite utilizar características adicionales como el estado local y los métodos de ciclo de vida.
+
+
+
+### Agregar estado local a una clase
+
+1. Para poder trabajar con el estado utilizamos la palabra clave "**this.state.date**" en lugar de "**this.props.date**".
+
+   ```react
+   class Clock extends React.Component {
+     render() {
+       return (
+         <div>
+           <h1>Hello, world!</h1>
+           <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+         </div>
+       );
+     }
+   }
+   ```
+
+2. Debemos añadir un constructor de clase que asigne el estado inicial:
+
+   ```react
+   /*
+   class Clock extends React.Component {
+   */
+     constructor(props) {
+       super(props);
+       this.state = {date: new Date()};
+     }
+   /*
+     render() {
+       return (
+         <div>
+           <h1>Hello, world!</h1>
+           <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+         </div>
+       );
+     }
+   }
+   */
+   ```
+
+   > Los componentes de clase siempre deben invocar al constructor base con `props`.
+
+
+
+**No modifiques el estado directamente**
+
+Por ejemplo, esto no volverá a renderizar un componente:
+
+```react
+// Incorrecto
+this.state.comment = 'Hello';
+```
+
+En su lugar utiliza `setState()`:
+
+```react
+// Correcto
+this.setState({comment: 'Hello'});
+```
+
+El único lugar donde puedes asignar `this.state` es el constructor.
+
+
+
+**Las actualizaciones del estado pueden ser asíncronas**
+
+React puede agrupar varias invocaciones a `setState()` en una sola actualización para mejorar el rendimiento.
+
+Debido a que `this.props` y `this.state` pueden actualizarse de forma asincrónica, no debes confiar en sus valores para calcular el siguiente estado.
+
+```react
+// Correcto
+this.setState((state, props) => ({
+  counter: state.counter + props.increment
+}));
+```
+
+> Acepta una función en lugar de un objeto. Esa función recibirá el estado previo como primer argumento, y las props en el momento en que se aplica la actualización como segundo argumento
+
+
+
+**Los datos fluyen hacia abajo**
+
+Ni los componentes padres o hijos pueden saber si un determinado componente tiene o no tiene estado y no les debería importar si se define como una función o una clase.
+
+Por eso es que el estado a menudo se le denomina local o encapsulado. No es accesible desde otro componente excepto de aquel que lo posee y lo asigna.
+
+**Un componente puede elegir pasar su estado como props a sus componentes hijos.** A esto comúnmente se le llama flujo de datos «descendente» o «unidireccional». Cualquier estado siempre es propiedad de algún componente específico, y cualquier dato o interfaz de usuario derivados de ese estado solo pueden afectar los componentes «debajo» de ellos en el árbol.
+
+Si imaginas un árbol de componentes como una cascada de props, **el estado de cada componente es como una fuente de agua adicional que se le une en un punto arbitrario, pero también fluye hacia abajo.**
+
+
+
+
+
+## Proyecto
 
 
 
@@ -843,6 +1099,10 @@ class BadgeNew extends React.Component {
 
 Con este método tenemos la información del formulario compartida para los componentes de nuestra página. El estado de "BadgeForm" fue movido a "BadgeNew" quien a su vez transmite su información devuelta al formulario y a "Badge".
 
+**Resultado**
+
+![](\images\BadgeNew.png)
+
 
 
 ### Generar componentes desde cliente
@@ -855,7 +1115,6 @@ import Navbar from '../components/Navbar'
 import './styles/Badges.css'
 import confLogo from '../images/badge-header.svg'
 import BadgesList from '../components/BadgesList'
-
 export class Badges extends React.Component {
 
     state = {
@@ -927,6 +1186,8 @@ export default Badges
 
 
 
+* Generamos otro componente denominado BadgesList
+
 ```react
 import React from 'react';
 
@@ -976,3 +1237,8 @@ class BadgesList extends React.Component {
 export default BadgesList;
 ```
 
+
+
+**Resultado**
+
+![](\images\BadgesList.png)
