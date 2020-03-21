@@ -1,10 +1,6 @@
 # REACT 
 
-React.js es una biblioteca de JavaScript para construir interfaces de usuario, es una biblioteca de código. Se trabaja mediante componentes.
-
-Posee alta demanda por que es una librería muy ligera, posee un alto rendimiento y es mantenida constantemente.
-
-JSX es la sintaxis con la que se escribe código en React. Es una especie de fusión entre HTML y JS.
+React.js es una biblioteca de JavaScript para construir interfaces de usuario. Se trabaja mediante componentes. Posee alta demanda debido a que es una librería muy ligera, posee un alto rendimiento y es mantenida constantemente. JSX es la sintaxis con la que se escribe código en React. Es una especie de fusión entre HTML y JS.
 
 
 
@@ -16,25 +12,11 @@ El virtual DOM es una copia exacta del DOM que se guarda en memoria, el usuario 
 
 
 
-```react
-<Layout>
-    <Header />
-    <Blogspot post={data} />
-    <Footer />
-</Layout>
-```
-
-> Esto es JSX, es una especie de HTML en JavaScript.
-
-
-
 **Componentes - ¿Que son?**
 
-Los componentes son fragmentos de código que se pueden re-utilizar.
+Los componentes son fragmentos de código que se pueden re-utilizar. En un sitio al trabajar con una grilla se repite un mismo diseño en varias ocasiones, por lo que es un lugar indicado para utilizar componentes. Esto permite re-utilizar un trozo de código en varios lugares de la aplicación mediante su nombre, modificando únicamente sus parámetros al indicar su nombre. Los componentes pueden estar compuestos de otros componentes.
 
-En un sitio al trabajar con una grilla se repite un mismo diseño en varias ocasiones, por lo que es un lugar indicado para utilizar componentes. Esto permite re-utilizar un trozo de código en varios lugares de la aplicación mediante su nombre, modificando únicamente sus parámetros al indicar su nombre.
 
-Los componentes pueden estar compuestos de otros componentes.
 
 
 
@@ -57,8 +39,6 @@ Al instalar Node podemos utilizar el administrador de paquetes de node (npm), pe
 ```bash
 npm install -g create-react-app
 ```
-
-Se recomienda conocer acerca de WebPack.
 
 **Crear un proyecto**
 
@@ -83,9 +63,9 @@ En el proyecto nos encontramos con un archivo denominado **package.json** que se
 
 
 
+### Conceptos Básicos en React
 
-
-### JSX
+**JSX**
 
 Es de una extensión de la sintaxis de JavaScript. Es recomendado utilizarlo con React para describir cómo debería ser la interfaz de usuario. 
 
@@ -95,17 +75,76 @@ Es de una extensión de la sintaxis de JavaScript. Es recomendado utilizarlo con
 const element = <h1>Hello, world!</h1>;
 ```
 
-
-
 React no requiere usar JSX, pero la mayoría de la gente lo encuentra útil como ayuda visual cuando trabajan con interfaz de usuario dentro del código JavaScript. Esto también permite que React muestre mensajes de error o advertencia más útiles. 
 
 JSX produce elementos de React, los elementos son bloques de las aplicaciones en React, describen lo que se quiere ver por pantalla. 
 
 
 
-**Renderizado en React**
+**CREAR COMPONENTE**
 
-En el archivo index.js cargamos nuestro componente App mediante el siguiente código:
+La forma más simple de definir un componente es escribir una función de JavaScript. Los componentes aceptan un argumento denominado "**prop**".
+
+Los componentes poseen la siguiente sintaxis:
+
+```jsx
+import React from 'react' // 1. Importamos React.
+
+const Componente = () => { // 2. Generamos un función componente.
+  return (  );
+}
+ 
+export default Componente; // 3. Exportamos la función componente.
+```
+
+> Con algunas extensiones de Visual Studio Code se puede generar rápidamente un componente:
+>
+> 1. `imr` - es un acortador que importa React en el archivo.
+> 2. `sfc` - es un acortador que genera una función componente.
+
+
+
+**REGLAS ACERCA DE LOS COMPONENTES**
+
+1. **Componentes con padre único:** todos los componentes deben tener un único elemento padre, el resto de elementos pueden ir anidados en su interior. Podemos recurrir a la etiqueta `<Frament>` que viene disponible al importar react para envolver a todos los elementos en un único padre. 
+
+2. **Etiquetas self-closing invalidas**: Las etiquetas ***self-closing*** deben ser cerradas en react.
+
+3. **class y camelCase**: la propiedad class queda sustituida por className y a su vez todos los atributos especiales.
+
+4. **No condicionales**: en JSX no podemos utilizar if, else o while.
+5. **Uppercase File:** Los nombres de los archivos de un componente deben comenzar por mayúsculas.
+
+*Para renderizar más de un componente debemos crear la ruta **"/src/components"**, crear componentes y luego importarlos.*
+
+
+
+**AGREGAR EXPRESIONES JSX**
+
+Como se menciono anteriormente los componentes al utilizar JSX no pueden albergar condiciones ni estructuras de control por lo que debemos recurrir a las expresiones JSX.
+
+| Operación                                     | Expresión                                                    |
+| --------------------------------------------- | ------------------------------------------------------------ |
+| Devolver operaciones                          | `{ 1 + 1 } o { a + b }`                                      |
+| Devolver variables, objetos, etc...           | `<p>Hola { user.name }</p>`                                  |
+| Añadir condicionales con operadores ternarios | `<p> { user.premium ? "Bienvenido a tu cuenta premium" : null } </p>` |
+
+> Las expresiones pueden ser incluidas en cualquier lugar dentro de un bloque JSX.
+>
+
+
+
+
+
+### Flujo básico en React
+
+**RENDERIZADO EN REACT**
+
+En React se renderizan los componentes mediante un vinculo entre un archivo html y un archivo JavaScript. El primero se encarga de disponer el DOM y el segundo se encarga del renderizado de React y sus componentes. Con Create React App opera de la siguiente forma:
+
+
+
+En el archivo **index.js** cargamos nuestro componente **App** mediante el siguiente código:
 
 ```js
 ReactDOM.render(<App />, document.getElementById('root'));
@@ -119,7 +158,11 @@ De esta manera conseguimos que un componente sea cargado en un archivo html.
 
 
 
-**Renderizar componente externo desde index.js**
+**RENDERIZAR COMPONENTES EXTERNOS**
+
+En el archivo index.js importamos un componente único denominado App.js, este se encarga de contener al resto de componentes que conformaran la lógica de la aplicación.
+
+
 
 > **App.js**
 >
@@ -149,271 +192,213 @@ ReactDOM.render(<App />, document.getElementById("root"));
 
 
 
-**Crear componente**
+### STATE
 
-Como ejemplo generamos el siguiente componente basado en un navbar: 
+Los estados **almacenan datos mutables provenientes de los componentes que se pueden importar y utilizar en la aplicación**. Los estados se pueden definir de varias formas, sin embargo en las ultimas actualizaciones de React se tienden a utilizar Hooks.
+
+
+
+**HOOKS**
+
+Se trata de funciones que permiten manipular el estado en React y su ciclo de vida mediante componentes funcionales (que son los que siempre vamos a utilizar). **Los Hooks más frecuentes son: useState, useEffect y useContext.**
+
+
+
+**useState**: Permite manipular el estado en un componente al declarar este Hook. Mediante las constantes se puede obtener el valor del estado y actualizarlo en cualquier componente que se vincule.
+
+* **Sintaxis**
+
+  ```jsx
+  const [state, setState] = useState(initialState)
+  ```
+
+  > `state` devuelve el valor del estado y `setState` permite actualizarlo.
+
+Al principio `state` posee el mismo valor pasado como primer argumento, es decir, lo definido en `initialState`.
+
+La función `setState` se utiliza para actualizar el estado. Acepta un nuevo valor de estado y lo renderiza.
 
 ```jsx
-import React from 'react';
-import {BrowserRouter, Link} from 'react-router-dom'
-
-const App = () => (
-  <BrowserRouter>
-    <header className="navbar">
-      <h1>LOGO</h1>
-      <nav>
-        <ul>
-          <li> <Link to="#">Pagina uno</Link> </li>
-          <li> <Link to="#">Pagina dos</Link> </li>
-          <li> <Link to="#">Pagina tres</Link> </li>
-        </ul>
-      </nav>
-    </header>
-  </BrowserRouter>
-)
-
-export default App;
-```
-
-**Componentes con padre único:** todos los componentes deben tener un único elemento padre, el resto de elementos pueden ir anidados en su interior. Podemos recurrir a la etiqueta `<Frament>` que viene disponible al importar react para envolver a todos los elementos en un único padre. 
-
-**Etiquetas self-closing invalidas**: Las etiquetas ***self-closing*** deben ser cerradas en react.
-
-**class y camelCase**: la propiedad class queda sustituida por className y a su vez todos los atributos especiales.
-
-**No condicionales**: en JSX no podemos utilizar if, else o while.
-
-Para renderizar más de un componente debemos crear la ruta **"/src/components"**, crear componentes y luego importarlos.
-
-
-
-**Agregar expresiones JavaScript en JSX**
-
-Las expresiones deben ser incluidas de la siguiente forma en JSX:
-
-1. `{ 1 + 1 }`
-
-2. ```jsx
-   const user= { "name": "Carlos Brignardello", "user": "cbrigcode" }
-   /*
-   const Card = () => (
-       <div className="card">
-       	*/
-           <p>Hola { user.name }</p>
-   		/*
-   ```
-
-3. ```jsx
-   const user = { "name": "Carlos Brignardello", "user": "cbrigcode", "premium": true }
-   /*
-   const Card = () => (
-       <div className="card">
-       */
-           <p> { user.premium ? "Bienvenido a tu cuenta premium" : null } </p>
-   ```
-
-   De esta forma utilizamos condicionales en JSX. Los String pueden poseer etiquetas en su interior. Las expresiones pueden ser usadas para completar atributos html.
-
-
-
-En el ejemplo a continuación, declaramos una variable llamada `name` y luego la usamos dentro del JSX envolviéndola dentro de llaves:
-
-```react
-const name = 'Carlos Brignardello';
-const element = <h1>Hello, {name}</h1>;
-
-ReactDOM.render(element, document.getElementById('root')
-);
+setState(newState)
 ```
 
 
 
-En el ejemplo a continuación, insertamos el resultado de llamar la función de JavaScript, `formatName(user)`, dentro de un elemento `h1`.
+**useEffect:** Este Hook permite indicarle al componente que debe ejecutar una tarea al renderizarse. Se utiliza para manejar el ciclo de vida del componente pues reemplaza a las siguientes funciones: ~~componentDidMount~~, ~~componentDidUpdate~~ y ~~componentWillUnmount~~. 
+
+* **Sintaxis**
+
+  ```jsx
+  useEffect( () => {
+      ...., []
+  })
+  ```
+
+
+
+useContext: https://drive.google.com/file/d/1kzrqOTPyBsaHp_0EsBoBZyvcCS6o0pwo/view
+
+
+
+> **NOTA:** Todos los hooks deben ser importados.
+
+
+
+Por ejemplo, a continuación se presenta un estado mediante Hooks que contienen una lista de objetos.
 
 ```react
-function formatName(user) {
-  return user.firstName + ' ' + user.lastName;
+import React, { Fragment, useState } from 'react';
+
+function App() {
+  const [ products, setProducts ] = useState([
+    { id: 1, name: 'Camisa ReactJS', price: '10.000' },
+    { id: 2, name: 'Camisa AngularJS', price: '10.000' },
+    { id: 3, name: 'Camisa VueJS', price: '10.000' },
+    { id: 4, name: 'Camisa JavaScript', price: '10.000' },
+    { id: 5, name: 'Camisa Python', price: '10.000' }
+  ])
+```
+
+> Para manipular los estados con Hooks utilizamos `useState`.
+
+
+
+**COMPARTIR ESTADOS**
+
+En las aplicaciones de React es común que se comparta un estado con varios componentes, en el siguiente ejemplo se procede a listar cada estado mediante un componente.
+
+
+
+**Cargar estados a un componente**
+
+Para cargar un estado debemos pasarlo como props al componente al que deseamos compartir los datos.
+
+```react
+import React, { Fragment, useState } from 'react';
+
+function Component() {
+  
+  // 1. Se define el estado.
+  const [ products, setProducts ] = useState([
+    { id: 1, name: 'Camisa ReactJS', price: '10.000' },
+    { id: 2, name: 'Camisa AngularJS', price: '10.000' }
+  ])
+
+  return (
+    <Fragment>
+      <h1>Lista</h1>
+      
+      <!--- 2. Cargamos el estado varias veces con map --->
+      { products.map( product => (
+        <!--- 3. Declaramos los props --->
+        <Product key={product.id} product={product}/>
+      ))}
+          
+    </Fragment>
+  );
 }
 
-const user = {
-  firstName: 'Carlos',
-  lastName: 'Brignardello'
-};
-
-const element = (
-  <h1>
-    Hello, {formatName(user)}!
-  </h1>
-);
-
-ReactDOM.render(
-  element,
-  document.getElementById('root')
-);
+export default Component;
 ```
 
-> De esta forma podemos insertar el nombre completo formateado de un usuario.
-
-
-
-Puedes usar JSX dentro de declaraciones `if` y bucles `for`, asignarlo a variables, aceptarlo como argumento, y retornarlo desde dentro de funciones:
-
-```react
-function getGreeting(user) {
-  if (user) {
-    return <h1>Hello, {formatName(user)}!</h1>;
-  }
-  return <h1>Hello, Stranger.</h1>;
-}
-```
-
-
-
-**Especificando atributos con JSX**
-
-Puedes utilizar comillas para especificar strings literales como atributos:
-
-```react
-const element = <div tabIndex="0"></div>;
-```
-
-También puedes usar llaves para insertar una expresión JavaScript en un atributo:
-
-```react
-const element = <img src={user.avatarUrl}></img>;
-```
-
-No pongas comillas rodeando llaves cuando insertes una expresión JavaScript en un atributo. Debes utilizar comillas (para los valores de los strings) o llaves (para las expresiones), pero no ambas en el mismo atributo.
-
-> **Advertencia:**
->
-> Dado que JSX es más cercano a JavaScript que a HTML, React DOM usa la convención de nomenclatura `camelCase` en vez de nombres de atributos HTML.
->
-> Por ejemplo, `class` se vuelve [`className`](https://developer.mozilla.org/es/docs/Web/API/Element/className) en JSX, y `tabindex` se vuelve [`tabIndex`](https://developer.mozilla.org/es/docs/Web/API/HTMLElement/tabIndex).
-
-
-
-**Nota**: No utilices comillas rodeando llaves, las "comillas" son para valores de atributos con strings, las {llaves} son para expresiones JavaScript.
-
-
-
-**React solo actualiza lo que es necesario**
-
-React DOM compara el elemento y su hijos con el elemento anterior, y solo aplica las actualizaciones del DOM que son necesarias para que el DOM esté en el estado deseado. Puedes verificar esto inspeccionando con las herramientas del navegador.
-
-Aunque creamos un elemento que describe el árbol de la interfaz de usuario en su totalidad en cada instante, React DOM solo actualiza el texto del nodo cuyo contenido cambió.
-
-En nuestra experiencia, pensar en cómo la interfaz de usuario debería verse en un momento dado y no en cómo cambiarla en el tiempo, elimina toda una clase de errores.
-
-
-
-### Props
-
-Las propiedades nos sirven básicamente para cargar de datos a los componentes, de modo que éstos puedan personalizar su comportamiento, o para transferir datos de unos componentes a otros para producirse la interoperabilidad entre componentes.
-
-
-
-Podemos utilizarlo para otorgar valores a un componente al momento de declararlo de la siguiente forma:
-
-1. ```jsx
-   const Card = props => (
-       <div className="card">
-           <p>Hola { user.name }</p>
-           <p> { user.premium ? "Bienvenido a tu cuenta premium" : null } </p>
-           <img src={props.url} alt=""/>
-           <h2>Este es {props.name}.</h2>
-       </div>
-   )
-   ```
-
-   Debemos entregar como atributo "props" al componente para dentro del mismo poder utilizar la notación "**props.PROPIEDAD**" que definira el valor asignado al ser declarado.
-
-2. ```jsx
-       <Card 
-         name="Mojito" url="https://cdn140.picsart.com/295235072129211.png?r1024x1024"
-       />
-       <Card 
-           name="Tequila"
-           url="https://i.pinimg.com/564x/82/1c/8c/821c8c26d29feb57f3feae5171123901.jpg"
-       />
-       <Card />
-   ```
-
-   En este caso en el componente App.js fue declaro el componente y se le asignaron las propiedades "name", "url".
-
-Si revisamos desde la consola de React podremos ver esas propiedades.
-
-Al declarar el objeto **props** en un componente se permite la lectura de las propiedades al crear los componentes.
-
-
-
-También es posible en el componente utilizar props al denotar únicamente las propiedades que se desean trabajar:
+Declaramos un estado y luego lo cargamos varias veces mediante `map` a un componente. Para que el estado pueda ser manipulado por el componente externo debemos pasarlos al componente como props en su interior de la siguiente forma:
 
 ```jsx
-const Card = ({ url, name }) => (
-    <div className="card">
-        <p>Hola { user.name }</p>
-        <p> { user.premium ? "Bienvenido a tu cuenta premium" : null } </p>
-        <img src={url} alt=""/>
-        <h2>Este es {name}.</h2>
-    </div>
-)
+<Component state={state} key={key} />
 ```
 
 
 
-### Tipos de componente
+**Manipular estado desde otro componente**
 
+Para manipular los estados manejamos los props obtenidos y los presentamos como se requiera.
 
-
-**Componente funcional o presentacional**
-
-Su única función es presentarse en la interfaz, no posee lógica, no puede presentar eventos o cambiar por si solo, solo recibe propiedades y las procesa.
-
-Su sintaxis es la siguiente:
-
-```jsx
+```react
 import React from 'react'
 
-const Component = props => (
-    <div>
-    	ESTRUCTURA JSX
-    </div>
-)
+// 1. Extraemos los props mediante el uso de llaves {}.
+const Product = ({ product }) => {
+  // 2. En el caso de un objeto desestructuramos los datos.
+  const {name, price, id} = product
 
-export default Component
+  return ( 
+    <div>
+      <!--- 3. Presentamos los datos obtenidos --->
+      <h3>{name}</h3>
+      <p>{price}</p>
+    </div>
+   );
+}
+ 
+export default Product;
 ```
 
-1. Debemos **importar react.**
-2. Utilizamos una constante y le damos un **nombre basado en el nombre del componente** que será igual a la función que agregaremos que en este caso posee los **props como argumento**. En su interior retornaremos una **estructura JSX**, es por eso que utilizamos "**()**" en el arrowFunction.
-3. Exportamos el componente.
+> En el componente externo simplemente presentamos la información.
 
 
 
-**Utilizar Ternarios para undefined**
+**Cargar componente según valor del state**
 
-En caso de que un componente no posea una imagen o un contenido al ser definido podemos definir un dato predeterminado:
+Podemos definir si cargar o no un componente dependiendo del valor de su estado asociado.
+
+```react
+{cart.length === 0
+  ? <p>No hay elementos</p>
+  : 
+  cart.map(product => (
+    <Product
+      key={product.id}
+      product={product}
+    />
+  ))
+}
+```
+
+
+
+### Eventos
+
+En React se pueden programar varios tipos de eventos de forma distinta a como se desarrolla en JQuery y JavaScript.
+
+
+
+**ONCLICK**
 
 ```jsx
-const Card = ({ url, name }) => (
-    <div className="card">
-        <p>Hola { user.name }</p>
-        <p> { user.premium ? "Bienvenido a tu cuenta premium" : null } </p>
-        {
-            url ? <img src={url} alt=""/>
-            : <img src="https://www.tuotrodiario.com/imagenes/en-la-red/2018060174867/conoce-luhu-gatito-mas-triste-del-mundo/0-245-54/gatito3-z.jpg" alt=""/>
-        }
-        <h2>
-        {name ? name  
-        : <h2>No se pudo encontrar el gatito.</h2>}
-        </h2>
-    </div>
-)
+      <button 
+        type="button"
+        onClick = { () => selectProduct(id) }
+        Agregar al carro
+      </button>
 ```
 
-Al no enviar datos en el prop se mostrara una imagen y un texto por defecto.
+> Para trabajar el evento utilizamos la palabra clave `onClick` y le otorgamos como atributo el llamado a una función que ejecutara la tarea deseada.
+
+**Ex. Función para agregar productos**
+
+```react
+  const selectProduct = id => {
+    const product = products.filter(product => product.id === id)[0]
+    setCart([...cart, product])
+  }
+```
+
+> Al hacer clic actualizaremos el estado, sin embargo cada valor nuevo añadido reemplazara al anterior. Por lo que en el nuevo estado pasamos todo el contenido del estado anterior y el nuevo.
+
+**Ex. Función para borrar producto**
+
+```react
+const removeProduct = id => {
+  const products = cart.filter( product => product.id !== id )
+  setCart(products)
+}
+```
+
+> Mediante filter removemos todo elemento que coincida con el elemento a borrar.
 
 
+
+### Documentar proyectos
 
 **Librería prop-types**
 
@@ -441,39 +426,4 @@ Card.defaultProps = {
 
 De esta forma declaramos el tipo de dato esperado y además un comportamiento por defecto.
 
-
-
-**Recorrer Arrays de componentes**
-
-Definimos en App.js una lista de objetos:
-
-```jsx
-const gatitos = [
-  {"name": "Mojito", "url": "https://cdn140.picsart.com/295235072129211.png?r1024x1024"},
-  {"name": "Tequila", "url": "https://i.pinimg.com/564x/82/1c/8c/821c8c26d29feb57f3feae5171123901.jpg"},
-  {"name": "Gustavo", "url": "https://cdn140.picsart.com/286770672011211.png?r1024x1024"},
-  {"name": "Snowball", "url": "https://i.pinimg.com/originals/17/0a/81/170a815040a32fcc2f596c59c9284c15.jpg"},
-  {"name": "Jaskier", "url": "https://i.pinimg.com/originals/68/6c/25/686c25b3885ec377547d2b73c2c51eb0.jpg"},
-]
-```
-
-
-
-Para recorrer el componente varias veces hacemos lo siguiente:
-
-```jsx
-const App = () => (
-  <div>
-    <Navbar />
-    {
-      gatitos.map( gato => 
-        <Card 
-          name={gato.name} 
-          url={gato.url}
-        />
-      )
-    }
-  </div>
-)
-```
-
+**ACTUALIZAR ESTE APARTADO ...**
