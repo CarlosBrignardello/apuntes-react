@@ -4,6 +4,35 @@ React.js es una biblioteca de JavaScript para construir interfaces de usuario. S
 
 
 
+### Contenido
+
+* **Sobre React**
+  * Virtual DOM
+  * Componentes
+* **Create React App**
+* **Conceptos básicos**
+  * JSX
+  * Crear componentes
+  * Reglas de los componentes
+  * Expresiones JSX
+* **Flujo básico en React**
+  * Renderizado en React
+  * Renderizado de componentes
+* **State**
+  * **Hooks**
+    * useState
+    * useEffect
+  * Compartir estados
+* **Eventos**
+  * onClick
+  * onChange
+* **Documentar Proyectos**
+  * Prop Types
+
+
+
+### Sobre React
+
 **Virtual DOM**
 
 **DOM**: Document object model, es la estructura con la que se representa un documento HTML. 
@@ -234,12 +263,6 @@ setState(newState)
   })
   ```
 
-
-
-useContext: https://drive.google.com/file/d/1kzrqOTPyBsaHp_0EsBoBZyvcCS6o0pwo/view
-
-
-
 > **NOTA:** Todos los hooks deben ser importados.
 
 
@@ -398,9 +421,52 @@ const removeProduct = id => {
 
 
 
+**ONCHANGE**
+
+El evento onChange nos permite ejecutar una tarea cuando se realiza un cambio en un elemento.
+
+
+
+**Extraer contenido escrito por el usuario para definir el state**
+
+```react
+const Form = () => {
+  /* Añadimos el state */
+  const [ task, setTask ] = useState({
+    user_name: '',
+    task_name: '',
+    date: '',
+    hour: '',
+    description: ''
+  })
+
+  /* Añadimos función para cuando se ingresen datos. */
+  const handleChange = e => {
+    setTask({
+      ...task, [e.target.name] : e.target.value
+    })
+  }
+
+...
+
+	/* Mediante el atributo name de los inputs obtenemos su contenido en la función */
+        <label htmlFor="">Usuario</label>
+        <input 
+          type="text"
+          name="user_name"
+          className="u-full-width"
+          placeholder="Ingresa tu nombre de usuario"
+          onChange={ handleChange } /* Utilizamos la función */
+        />
+```
+
+
+
+
+
 ### Documentar proyectos
 
-**Librería prop-types**
+**PROP TYPES**
 
 Permite definir tipos de propiedades, entre ellas propiedades por defecto.
 
