@@ -31,6 +31,8 @@ React.js es una biblioteca de JavaScript para construir interfaces de usuario. S
 
 
 
+
+
 ### Sobre React
 
 **Virtual DOM**
@@ -44,8 +46,6 @@ El virtual DOM es una copia exacta del DOM que se guarda en memoria, el usuario 
 **Componentes - ¿Que son?**
 
 Los componentes son fragmentos de código que se pueden re-utilizar. En un sitio al trabajar con una grilla se repite un mismo diseño en varias ocasiones, por lo que es un lugar indicado para utilizar componentes. Esto permite re-utilizar un trozo de código en varios lugares de la aplicación mediante su nombre, modificando únicamente sus parámetros al indicar su nombre. Los componentes pueden estar compuestos de otros componentes.
-
-
 
 
 
@@ -92,6 +92,8 @@ En el proyecto nos encontramos con un archivo denominado **package.json** que se
 
 
 
+
+
 ### Conceptos Básicos en React
 
 **JSX**
@@ -100,7 +102,7 @@ Es de una extensión de la sintaxis de JavaScript. Es recomendado utilizarlo con
 
 **Ejemplo**:
 
-```react
+```jsx
 const element = <h1>Hello, world!</h1>;
 ```
 
@@ -110,20 +112,34 @@ JSX produce elementos de React, los elementos son bloques de las aplicaciones en
 
 
 
-**CREAR COMPONENTE**
-
-La forma más simple de definir un componente es escribir una función de JavaScript. Los componentes aceptan un argumento denominado "**prop**".
-
-Los componentes poseen la siguiente sintaxis:
+**Renderizar React**
 
 ```jsx
-import React from 'react' // 1. Importamos React.
+import React from 'react';
+import ReactDOM from 'react-dom'
+import Componente from './Componente';
+import './index.css'
 
-const Componente = () => { // 2. Generamos un función componente.
-  return (  );
+const divRoot = document.querySelector('#root')
+ReactDOM.render(<Componente />, divRoot)
+```
+
+> Para trabajar con propiedades JSX debemos importar React. Para renderizar todos los elementos de React existe una función superior denominada `ReactDOM.render()`. En la cual se indican específicamente el componente a cargar y donde.
+
+
+
+**Componente funcional base**
+
+```jsx
+import React from 'react';
+
+const Componente = () => {
+  return ( 
+  	<h1>Componente!</h1>
+  );
 }
  
-export default Componente; // 3. Exportamos la función componente.
+export default Componente;
 ```
 
 > Con algunas extensiones de Visual Studio Code se puede generar rápidamente un componente:
@@ -133,230 +149,620 @@ export default Componente; // 3. Exportamos la función componente.
 
 
 
-**REGLAS ACERCA DE LOS COMPONENTES**
+**Fragment**
 
-1. **Componentes con padre único:** todos los componentes deben tener un único elemento padre, el resto de elementos pueden ir anidados en su interior. Podemos recurrir a la etiqueta `<Frament>` que viene disponible al importar react para envolver a todos los elementos en un único padre. 
+Para renderizar más de un elemento dentro de un componente debemos anidarlos en una etiqueta `div`. El problema con esto es que esto genera un elemento adicional a nuestro documento, ocupando espacio innecesario. Para solucionar esto existe `Fragment` que se trata de un componente más que permite la inclusión de más de un elemento al interior de un componente.
 
-2. **Etiquetas self-closing invalidas**: Las etiquetas ***self-closing*** deben ser cerradas en react.
+```jsx
+import React, { Fragment } from 'react';
 
-3. **class y camelCase**: la propiedad class queda sustituida por className y a su vez todos los atributos especiales.
+const Componente = () => {
+  return (
+  <Fragment>
+    <h1>Componente!</h1>
+    <p>Soy un parrafo</p>
+  </Fragment>
+  
+  )}
+ 
+export default Componente;
+```
 
-4. **No condicionales**: en JSX no podemos utilizar if, else o while.
-5. **Uppercase File:** Los nombres de los archivos de un componente deben comenzar por mayúsculas.
-
-*Para renderizar más de un componente debemos crear la ruta **"/src/components"**, crear componentes y luego importarlos.*
+> Como alternativa podemos reemplazar `Fragment` por `<> CONTENIDO </>`.
 
 
 
-**AGREGAR EXPRESIONES JSX**
+**Importar estilos**
 
-Como se menciono anteriormente los componentes al utilizar JSX no pueden albergar condiciones ni estructuras de control por lo que debemos recurrir a las expresiones JSX.
+```jsx
+// En un componente sea cual sea
+import './index.css'
+```
 
-| Operación                                     | Expresión                                                    |
-| --------------------------------------------- | ------------------------------------------------------------ |
-| Devolver operaciones                          | `{ 1 + 1 } o { a + b }`                                      |
-| Devolver variables, objetos, etc...           | `<p>Hola { user.name }</p>`                                  |
-| Añadir condicionales con operadores ternarios | `<p> { user.premium ? "Bienvenido a tu cuenta premium" : null } </p>` |
 
-> Las expresiones pueden ser incluidas en cualquier lugar dentro de un bloque JSX.
+
+**Imprimir variables en un componente**
+
+Para devolver variables utilizamos expresiones JSX de la siguiente forma:
+
+```jsx
+import React, { Fragment } from 'react';
+
+const Componente = () => {
+
+  const name = 'Carlos Brignardello'
+  return (
+  <Fragment>
+    <p>Este componente fue realizado por:</p>
+    <h3>{name}</h3>
+  </Fragment>
+  
+  )}
+ 
+export default Componente;
+```
+
+
+
+**Imprimir una lista**
+
+```jsx
+import React, { Fragment } from 'react';
+
+const Componente = () => {
+
+  const pares = [2, 4, 6, 8, 10]
+  return (
+  <Fragment>
+    <p>Lista de números pares</p>
+    <h3>{pares}</h3>
+  </Fragment>
+  
+  )}
+ 
+export default Componente;
+```
+
+> JSX puede imprimir un Array, más no elementos booleanos o un objeto.
+
+
+
+**Imprimir objeto convertido a String**
+
+```jsx
+import React, { Fragment } from 'react';
+
+const Componente = () => {
+
+  const objeto = {
+    name: 'Carlos',
+    edad: 21
+  }
+
+  return (
+  <Fragment>
+    <p>Lista de números pares</p>
+    <h3>{ JSON.stringify( objeto, null, 3 ) }</h3>
+  </Fragment>
+  
+  )}
+ 
+export default Componente;
+```
+
+> `null, 3` formatea el estilo de JSON.  
+
+
+
+### Comunicación entre componentes
+
+Para mantener un comunicación entre componente se utilizan los `props` . 
+
+
+
+**Pasar información del componente padre a un componente hijo**
+
+```jsx
+// Componente padre
+ReactDOM.render(<Componente name="Carlos Brignardello"/>, divRoot)
+
+
+// Componente hijo
+const Componente = ( props ) => {
+
+  return (
+  <Fragment>
+    <p>Hola mi nombre es</p>
+    <h3>{ props.name }</h3>
+  </Fragment>
+  
+  )}
+ 
+export default Componente;
+```
+
+> Un componente padre puede enviar información a un componente hijo y un componente hijo puede leer esa información mediante los `props`.
 >
 
 
 
+**Pasar información del hijo al padre**
+
+Para definir datos desde un componente hijo a un padre la forma más básica es enviando el `setState` de un hook como prop al componente hijo para que desde el hijo se modifique el valor del estado del componente padre. Sin embargo si se desean conservar los datos anteriores en el cambio del estado aún así es posible hacerlo sin pasar esos datos como prop.
+
+```jsx
+// Componente padre
+<AddCategory setCategories={setCategories} />
+
+// Componente hijo
+const AddCategory = ({ setCategories }) => {
+
+  const [ inputValue, setInputValue ] = useState('Ingresa una categoria')
+
+  const handleInputChange = e => {
+    setInputValue( e.target.value )
+  }
+
+  const handleSubmit = e => {
+    e.preventDefault()
+    setCategories( categ => [ ...categ, inputValue ] )
+  }
+
+  return ( 
+    <>
+    <form onSubmit={ handleSubmit }>
+      <input 
+        type="text"
+        value={inputValue}
+        onChange={ handleInputChange }
+      />
+    </form>
+    </>
+   );
+}
+ 
+export default AddCategory;
+```
+
+> En el ejemplo mediante un input definimos el valor de la nueva categoría y en cuanto hacemos un **submit** se actualiza el valor del componente en el padre.
+>
+> `setCategories( categ => [ ...categ, inputValue ] )` de esta forma podemos preservar el valor original y adicionar uno nuevo.
 
 
-### Flujo básico en React
-
-**RENDERIZADO EN REACT**
-
-En React se renderizan los componentes mediante un vinculo entre un archivo html y un archivo JavaScript. El primero se encarga de disponer el DOM y el segundo se encarga del renderizado de React y sus componentes. Con Create React App opera de la siguiente forma:
 
 
 
-En el archivo **index.js** cargamos nuestro componente **App** mediante el siguiente código:
+**Leer props con desestructuración de objetos**
+
+```jsx
+const Componente = ({ name }) => {
+
+  return (
+  <Fragment>
+    <p>Hola mi nombre es</p>
+    <h3>{ name }</h3>
+  </Fragment>
+  
+  )}
+ 
+export default Componente;
+```
+
+
+
+**PropTypes**
+
+En ocasiones se dan casos en que un componente requiere si o si que se le envié información de parte del componente padre, una de las alternativas que existen en estos casos es definir valores por defecto en un componente mediante JS. Parar eso existe `propTypes`.
+
+Para validar una función de Hook utilizamos lo siguiente: `setCategories: PropTypes.func.isRequired`
+
+```jsx
+import React, { Fragment } from 'react';
+import PropTypes from 'prop-types'
+
+const Componente = ({ name }) => {
+
+  return (
+  <Fragment>
+    <p>Hola mi nombre es</p>
+    <h3>{ name }</h3>
+  </Fragment>
+  
+  )}
+
+  Componente.propTypes = {
+    name: PropTypes.string.isRequired
+  }
+ 
+export default Componente;
+```
+
+> Tras importar el modulo, definimos que el `prop` **name** reciba solo valores de tipo string en forma obligatoria.
+>
+> Existe un Snippet que genera todo este código: `rafcp`
+
+
+
+**DefaultProps**
+
+Para definir valores por defecto en las propiedades hacemos lo siguiente:
+
+```jsx
+  Componente.defaultProps = {
+    optional: 'Prefiero no decirlo.'
+  }
+```
+
+> Lo definimos antes de exportar el componente.
+
+
+
+
+
+### EVENTOS
+
+React posee sus propios eventos, por lo que estos reemplazan a los nativos de JS.
+
+
+
+**onClick**
+
+```jsx
+// Alternativa # 1  
+  const handleAdd = () => {
+    console.log('Button has been Press')
+  }
+
+  return ( 
+    <Fragment>
+      <h1>Conteo</h1>
+      <button onClick={ handleAdd }>+1</button>
+    </Fragment>
+   );
+
+// Alternativa # 2
+
+  return ( 
+    <Fragment>
+      <h1>Conteo</h1>
+      <button onClick={ () => console.log('Button has been Press') }>+1</button>
+    </Fragment>
+   );
+```
+
+
+
+**onChange**
 
 ```js
-ReactDOM.render(<App />, document.getElementById('root'));
+  const [ inputValue, setInputValue ] = useState('Ingresa una categoria')
+
+  const handleInputChange = e => {
+    setInputValue( e.target.value )
+  }
+
+  return ( 
+    <>
+      <input 
+        type="text"
+        value={inputValue}
+        onChange={ handleInputChange }
+      />
+    </>
+   );
+}
 ```
 
-Con `ReactDOM.render(elemento, donde)`, renderizamos un componente en una ubicación especifica.
-
-+ **DONDE**: por defecto en nuestro documento **index.html** posee un contenedor con un id denominado "***root***", este ultimo es manejado en el `ReactDom.render` mediante la función `document.getElementById("root")`. 
-
-De esta manera conseguimos que un componente sea cargado en un archivo html.
+> En el ejemplo definimos el valor del input mediante el estado inicial del Hook. Posteriormente al modificar este valor disparamos el evento que actualiza el estado del Hook según las interacciones del usuario. Con `e.target.value` accedemos al valor del `<input>`.
 
 
 
-**RENDERIZAR COMPONENTES EXTERNOS**
-
-En el archivo index.js importamos un componente único denominado App.js, este se encarga de contener al resto de componentes que conformaran la lógica de la aplicación.
-
-
-
-> **App.js**
->
-> Generamos el componente, en este caso el componente simplemente devuelve un h1.
+**onSubmit**
 
 ```jsx
-import React from 'react';
+  const handleSubmit = e => {
+    e.preventDefault()
+    console.log('Submit realizado')
+  }
 
-const App = () => <h1>h1 desde App.js</h1>
-
-export default App;
+  return ( 
+    <>
+    <form onSubmit={ handleSubmit }>
+      <input 
+        name="name"
+        type="text"
+        value={inputValue}
+        onChange={ handleInputChange }
+      />
+    </form>
+    </>
+   );
 ```
 
+```js
+  const handleInputChange = ({ target }) => {
+    setformState({
+      ...formState,
+      [ target.name ]: target.value
+    })
+  }
+```
 
-
-> **index.js**
+> De esta forma podemos actualizar el valor de un objeto en base al valor de un `input`.
 >
-> Importamos App.js y lo declaramos como elemento a renderizar.
-
-```jsx
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-
-ReactDOM.render(<App />, document.getElementById("root"));
-```
 
 
 
-### STATE
 
-Los estados **almacenan datos mutables provenientes de los componentes que se pueden importar y utilizar en la aplicación**. Los estados se pueden definir de varias formas, sin embargo en las ultimas actualizaciones de React se tienden a utilizar Hooks.
+
+### El estado
+
+Los estados **almacenan datos mutables provenientes de los componentes que se pueden importar y utilizar en la aplicación**. Los estados se pueden definir de varias formas, sin embargo en las ultimas actualizaciones de React se tiende a utilizar Hooks.
 
 
 
 **HOOKS**
 
-Se trata de funciones que permiten manipular el estado en React y su ciclo de vida mediante componentes funcionales (que son los que siempre vamos a utilizar). **Los Hooks más frecuentes son: useState, useEffect y useContext.**
+Se trata de funciones que permiten manipular el estado en React y su ciclo de vida mediante componentes funcionales. **Los Hooks más frecuentes son: useState, useEffect y useContext.**
 
 
 
-**useState**: Permite manipular el estado en un componente al declarar este Hook. Mediante las constantes se puede obtener el valor del estado y actualizarlo en cualquier componente que se vincule.
+**useState**
 
-* **Sintaxis**
-
-  ```jsx
-  const [state, setState] = useState(initialState)
-  ```
-
-  > `state` devuelve el valor del estado y `setState` permite actualizarlo.
-
-Al principio `state` posee el mismo valor pasado como primer argumento, es decir, lo definido en `initialState`.
-
-La función `setState` se utiliza para actualizar el estado. Acepta un nuevo valor de estado y lo renderiza.
+`useState` contiene dos valores, el valor del estado y una función para modificarlo. Al definirlo es posible definir un estado inicial. En este caso 0.
 
 ```jsx
-setState(newState)
-```
+// Hook
+const [counter, setCounter] = useState( 0 )
 
-
-
-**useEffect:** Este Hook permite indicarle al componente que debe ejecutar una tarea al renderizarse. Se utiliza para manejar el ciclo de vida del componente pues reemplaza a las siguientes funciones: ~~componentDidMount~~, ~~componentDidUpdate~~ y ~~componentWillUnmount~~. 
-
-* **Sintaxis**
-
-  ```jsx
-  useEffect( () => {
-      ...., []
-  })
-  ```
-
-> **NOTA:** Todos los hooks deben ser importados.
-
-
-
-Por ejemplo, a continuación se presenta un estado mediante Hooks que contienen una lista de objetos.
-
-```react
-import React, { Fragment, useState } from 'react';
-
-function App() {
-  const [ products, setProducts ] = useState([
-    { id: 1, name: 'Camisa ReactJS', price: '10.000' },
-    { id: 2, name: 'Camisa AngularJS', price: '10.000' },
-    { id: 3, name: 'Camisa VueJS', price: '10.000' },
-    { id: 4, name: 'Camisa JavaScript', price: '10.000' },
-    { id: 5, name: 'Camisa Python', price: '10.000' }
-  ])
-```
-
-> Para manipular los estados con Hooks utilizamos `useState`.
-
-
-
-**COMPARTIR ESTADOS**
-
-En las aplicaciones de React es común que se comparta un estado con varios componentes, en el siguiente ejemplo se procede a listar cada estado mediante un componente.
-
-
-
-**Cargar estados a un componente**
-
-Para cargar un estado debemos pasarlo como props al componente al que deseamos compartir los datos.
-
-```react
-import React, { Fragment, useState } from 'react';
-
-function Component() {
-  
-  // 1. Se define el estado.
-  const [ products, setProducts ] = useState([
-    { id: 1, name: 'Camisa ReactJS', price: '10.000' },
-    { id: 2, name: 'Camisa AngularJS', price: '10.000' }
-  ])
-
-  return (
-    <Fragment>
-      <h1>Lista</h1>
-      
-      <!--- 2. Cargamos el estado varias veces con map --->
-      { products.map( product => (
-        <!--- 3. Declaramos los props --->
-        <Product key={product.id} product={product}/>
-      ))}
-          
-    </Fragment>
-  );
-}
-
-export default Component;
-```
-
-Declaramos un estado y luego lo cargamos varias veces mediante `map` a un componente. Para que el estado pueda ser manipulado por el componente externo debemos pasarlos al componente como props en su interior de la siguiente forma:
-
-```jsx
-<Component state={state} key={key} />
-```
-
-
-
-**Manipular estado desde otro componente**
-
-Para manipular los estados manejamos los props obtenidos y los presentamos como se requiera.
-
-```react
-import React from 'react'
-
-// 1. Extraemos los props mediante el uso de llaves {}.
-const Product = ({ product }) => {
-  // 2. En el caso de un objeto desestructuramos los datos.
-  const {name, price, id} = product
+// Función disparada por el evento
+  const handleAdd = () => {
+    setCounter( counter + 1 )
+  }
 
   return ( 
-    <div>
-      <!--- 3. Presentamos los datos obtenidos --->
-      <h3>{name}</h3>
-      <p>{price}</p>
-    </div>
+    <Fragment>
+      <h1>CounterApp</h1>
+      <h2>{ counter }</h2>
+      <button onClick={ handleAdd }>+1</button>
+    </Fragment>
    );
-}
- 
-export default Product;
 ```
 
-> En el componente externo simplemente presentamos la información.
+> React no permite que se modifique directamente el valor del estado, siempre se deberá hacer mediante la función del `setState`. 
+>
+> Por ejemplo utilizar funciones de Arrays como `push` u otros no permitirán que él que estado cambie.
+>
+> Lo que hace este componente es incrementar el valor del estado **counter** mediante un evento clic que dispara la función que incrementa el hook.
+
+
+
+**Modificar el estado en un Hook**
+
+Una recomendación para cambiar el estado de un Hook es la siguiente
+
+```js
+  const handleAdd = () => {
+    const valorUser = prompt('Ingresa un valor:')
+    setCategories( [...categories, valorUser] )
+    
+    //Ingresar nuevo valor primero
+    setCategories( [valorUser, ...categories ] )
+      
+    // Alternativa
+    setCategories( cats => [ ...cats, valorUser ] )
+  }
+  
+  // Errores
+  // categories.push(valorUser)
+  // setCategories( ...categories, valorUser )
+
+```
+
+
+
+**useEffect**
+
+Al trabajar con APIS o cualquier otro tipo de funciones en React, puede existir el inconveniente de que el renderizar nuevamente un elemento todas las funcionalidades se ejecuten nuevamente, esto incluye a las peticiones HTTP. Para evitar esto recurrimos a useEffect, el cual permite ejecutar código de manera condicional.
+
+```js
+  useEffect( () => {
+    getGifs()
+  }, [])
+```
+
+> Para utilizar useEffect pasamos una función como parámetro y en su interior definimos la función que queremos que se ejecute solo una vez al renderizar por primera vez. Como segundo argumento indicamos un arreglo vacío.
+
+
+
+**Custom Hook**
+
+A la hora de generar Custom Hooks se recomienda generar un directorio de Hooks. Los Hooks no son más que funciones que pueden contener otros hooks en su interior.
+
+```jsx
+// Hook generado
+export const useFetchGifs = () => {
+
+  const [state, setstate] = useState({
+      data: [],
+      loading: true
+  })
+
+  setTimeout(() => {
+    setstate( {...state, loading: false } )
+  }, 3000);
+  
+  return state
+}
+
+
+// Llamando al Hook
+import React from 'react'
+import { useFetchGifs } from '../hooks/useFetchGifs'
+
+export const GifGrid = ({ category }) => {
+  const { loading } = useFetchGifs()
+
+  return (
+    <>
+    <h3> {category} </h3>
+    { loading ? 'Cargando...' : 'Data Cargada'}
+    </>
+  )
+}
+```
+
+> En este caso tenemos un Hook personalizado que genera un objeto el cual modifica su propio estado pasados tres segundos. Al cargar el hook en el componente des estructuramos uno de los valores retornados y lo utilizamos en la renderización.
+
+
+
+**Custom Hook para esperar petición**
+
+```js
+import { useState, useEffect } from "react"
+import { getGifs } from '../helpers/getGifs'
+
+
+export const useFetchGifs = ( category ) => {
+
+  const [state, setstate] = useState({
+      data: [],
+      loading: true
+  })
+
+  
+  useEffect( () => {
+    getGifs( category ).then( imgs => {
+      setstate({
+        data: imgs,
+        loading: false
+      })
+    } )
+  }, [category], )
+  
+  return state
+}
+
+```
+
+
+
+
+
+### Fetch - Consumir API 
+
+Se recomienda siempre probar las APIS en Post Man para verificar que se estén obteniendo los datos correctos. 
+
+
+
+**Obtener valor especifico de una API**
+
+```js
+
+  const getGifs = async() => {
+
+    const URL = 'https://api.giphy.com/v1/gifs/search?q=Berzerk&limit=10&api_key=2mFkDLzGzkjoLCesSfoqvNziOwipGLID'
+    const resp = await fetch( URL )
+    const { data } = await resp.json()
+    const gifs = data.map( img => {
+      return{
+        id: img.id,
+        title: img.title,
+        url: img.images.downsized_medium.url
+      }
+    })
+    console.log(gifs)
+
+  }
+```
+
+
+
+
+
+
+
+**COSAS UTILES SIN CATEGORIA**
+
+
+
+**Cargar varios elementos en una etiqueta**
+
+En este caso se carga un Array de elementos a un elemento `<li>`.
+
+```jsx
+const [ categories, setCategories ] = useState(["Howl's Moving Castle", 'Berzerk', 'Attack On Titan'])
+
+  return ( 
+    <>
+      <ol>
+        { 
+        categories.map( ( cat ) => {
+        return <li key={ cat }>{ cat }</li>
+        }) 
+        }
+      </ol>
+    </>
+   );
+
+
+// NO HACER ESTO
+
+  { 
+    categories.map( ( cat, i ) => {
+    return <li key={ i }>{ cat }</li>
+    }) 
+  }
+
+```
+
+> Siempre es importante agregar la propiedad `key` en React. Nunca utilizar el índice para estos casos, por que es muy volátil, puede cambiar y generar errores.
+>
+> En casos reales los keys que se pasan son ids de bases de datos.
+
+
+
+
+
+
+
+**Helpers**
+
+Los helpers son funciones que realizan un cierto trabajo en especifico que reciben argumentos y devuelven algo.
+
+
+
+
+
+
+
+
+
+### DEPLOYMENT
+
+Esta sección añadirla en otro archivo o algún documento especial.
+
+
+
+**Crear Build con create-react-app**
+
+```js
+npm run build
+```
+
+
+
+**Desplegar a Github Pages**
+
+Renombramos la carpeta de producción como "docs" para que sea entendido por GitHub. De esta forma mediante la configuración del repositorio serviremos la página. sin usar otras ramas adicionales.
+
+
+
+
+
+------------------
+
+
 
 
 
@@ -364,7 +770,7 @@ export default Product;
 
 Podemos definir si cargar o no un componente dependiendo del valor de su estado asociado.
 
-```react
+```jsx
 {cart.length === 0
   ? <p>No hay elementos</p>
   : 
@@ -379,27 +785,9 @@ Podemos definir si cargar o no un componente dependiendo del valor de su estado 
 
 
 
-### Eventos
-
-En React se pueden programar varios tipos de eventos de forma distinta a como se desarrolla en JQuery y JavaScript.
-
-
-
-**ONCLICK**
-
-```jsx
-      <button 
-        type="button"
-        onClick = { () => selectProduct(id) }
-        Agregar al carro
-      </button>
-```
-
-> Para trabajar el evento utilizamos la palabra clave `onClick` y le otorgamos como atributo el llamado a una función que ejecutara la tarea deseada.
-
 **Ex. Función para agregar productos**
 
-```react
+```jsx
   const selectProduct = id => {
     const product = products.filter(product => product.id === id)[0]
     setCart([...cart, product])
@@ -410,7 +798,7 @@ En React se pueden programar varios tipos de eventos de forma distinta a como se
 
 **Ex. Función para borrar producto**
 
-```react
+```jsx
 const removeProduct = id => {
   const products = cart.filter( product => product.id !== id )
   setCart(products)
@@ -420,76 +808,3 @@ const removeProduct = id => {
 > Mediante filter removemos todo elemento que coincida con el elemento a borrar.
 
 
-
-**ONCHANGE**
-
-El evento onChange nos permite ejecutar una tarea cuando se realiza un cambio en un elemento.
-
-
-
-**Extraer contenido escrito por el usuario para definir el state**
-
-```react
-const Form = () => {
-  /* Añadimos el state */
-  const [ task, setTask ] = useState({
-    user_name: '',
-    task_name: '',
-    date: '',
-    hour: '',
-    description: ''
-  })
-
-  /* Añadimos función para cuando se ingresen datos. */
-  const handleChange = e => {
-    setTask({
-      ...task, [e.target.name] : e.target.value
-    })
-  }
-
-...
-
-	/* Mediante el atributo name de los inputs obtenemos su contenido en la función */
-        <label htmlFor="">Usuario</label>
-        <input 
-          type="text"
-          name="user_name"
-          className="u-full-width"
-          placeholder="Ingresa tu nombre de usuario"
-          onChange={ handleChange } /* Utilizamos la función */
-        />
-```
-
-
-
-
-
-### Documentar proyectos
-
-**PROP TYPES**
-
-Permite definir tipos de propiedades, entre ellas propiedades por defecto.
-
-**Instalar**: npm install prop-types
-
-Para hacer esta tarea simplemente importamos la librería en el componente en el que la buscamos aplicar y declaramos lo siguiente antes de exportar el componente:
-
-```jsx
-import PropTypes from 'prop-types'
-
-/* COMPONENTE */
-
-Card.propTypes = {
-    url: PropTypes.string,
-    name: PropTypes.string
-}
-
-Card.defaultProps = {
-    url: "https://www.tuotrodiario.com/imagenes/en-la-red/2018060174867/conoce-luhu-gatito-mas-triste-del-mundo/0-245-54/gatito3-z.jpg",
-    name: "No se pudo encontrar el gatito."
-}
-```
-
-De esta forma declaramos el tipo de dato esperado y además un comportamiento por defecto.
-
-**ACTUALIZAR ESTE APARTADO ...**
